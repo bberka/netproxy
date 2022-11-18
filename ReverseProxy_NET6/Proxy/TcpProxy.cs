@@ -31,7 +31,7 @@ namespace ReverseProxy_NET6.Proxy
                 throw new Exception($"[TCP] [{Name}] Invalid localIp: {Config.LocalIp}");
             }
             var localServer = new TcpListener(new IPEndPoint(localIpAddress, (ushort)Config.LocalPort));
-            localServer.Server.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.IPOptions, false);
+            localServer.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
             //if (localIpAddress.AddressFamily == AddressFamily.InterNetwork)
             //    
             //else if (localIpAddress.AddressFamily == AddressFamily.InterNetworkV6)

@@ -16,7 +16,9 @@ namespace ReverseProxy_NET6.Lib
 #endif
                 Dictionary<string, ProxyConfig>? configs = JsonSerializer.Deserialize<Dictionary<string, ProxyConfig>>(configJson);
                 ValidateConfig(configs);
+#pragma warning disable CS8604 // Possible null reference argument.
                 var tasks = configs.SelectMany(c => ProxyFromConfig(c.Key, c.Value));
+#pragma warning restore CS8604 // Possible null reference argument.
                 Task.WhenAll(tasks).Wait();
             }
             catch (Exception ex)
@@ -41,8 +43,11 @@ namespace ReverseProxy_NET6.Lib
                 try
                 {
                     var proxy = new UdpProxy(proxyName, proxyConfig);
+                    lock (Statics.UdpProxies)
+                    {
+                        Statics.UdpProxies.Add(proxy);
+                    }
                     task = proxy.Start();
-                    Statics.UdpProxies.Add(proxy);
                 }
                 catch (Exception ex)
                 {
@@ -58,8 +63,11 @@ namespace ReverseProxy_NET6.Lib
                 try
                 {
                     var proxy = new TcpProxy(proxyName, proxyConfig);
+                    lock (Statics.TcpProxies)
+                    {
+                        Statics.TcpProxies.Add(proxy);
+                    }
                     task = proxy.Start();
-                    Statics.TcpProxies.Add(proxy);
                 }
                 catch (Exception ex)
                 {
