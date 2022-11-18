@@ -23,7 +23,12 @@ namespace ReverseProxy_NET6.Proxy
             Name = name;
             Config = config;
         }
-        public async Task Start() //string forwardIp, ushort forwardPort, ushort hostPort, string? hostIp,
+        /// <summary>
+        /// Initiates the TCP proxy and starts listening with the config in constructor.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task Start() 
         {
             var result = IPAddress.TryParse(Config.LocalIp, out var localIpAddress);
             if (!result || localIpAddress == null)
@@ -32,10 +37,7 @@ namespace ReverseProxy_NET6.Proxy
             }
             var localServer = new TcpListener(new IPEndPoint(localIpAddress, (ushort)Config.LocalPort));
             localServer.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
-            //if (localIpAddress.AddressFamily == AddressFamily.InterNetwork)
-            //    
-            //else if (localIpAddress.AddressFamily == AddressFamily.InterNetworkV6)
-            //    localServer.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
+
             localServer.Start();
 
             EasLogConsole.Info($"[TCP] [{Name}] Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
@@ -71,7 +73,7 @@ namespace ReverseProxy_NET6.Proxy
                 {
                     var ips = await Dns.GetHostAddressesAsync(Config.ForwardIp).ConfigureAwait(false);
                     var tcpConnection = await TcpConnection.AcceptTcpClientAsync(localServer, new IPEndPoint(ips[0], (ushort)Config.ForwardPort)).ConfigureAwait(false);
-                    if (!ProxyValidator.ValidateConnection(this, tcpConnection,out string reason))
+                    if (!ConnValidator.Validate(this, tcpConnection,out string reason))
                     {
                         EasLogConsole.Warn($"[TCP] [{Name}] [{Config.LocalIp}:{Config.LocalPort}] [{tcpConnection.ClientEndPoint.GetIpAddress()}] Connection blocked due to {reason}");
                         tcpConnection.Client.Close();

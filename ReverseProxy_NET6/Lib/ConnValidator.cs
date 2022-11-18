@@ -3,9 +3,9 @@ using MoonReverseProxy;
 
 namespace ReverseProxy_NET6.Lib
 {
-    public static class ProxyValidator
+    public static class ConnValidator
     {
-        public static bool ValidateConnection(TcpProxy proxy, TcpConnection tcp, out string reason)
+        public static bool Validate(TcpProxy proxy, TcpConnection tcp, out string reason)
         {
             reason = "NaN";
             if (proxy.Config.FilterConnection.Count != 0)
@@ -50,7 +50,11 @@ namespace ReverseProxy_NET6.Lib
                     return false;
                 }
             }
-
+            if (BlockIpManager.IsBlocked(tcp.ClientEndPoint.GetIpAddress() ?? ""))
+            {
+                reason = "IP is blocked";
+                return false;
+            }
             return true;
 
         }

@@ -1,0 +1,3 @@
+﻿--This txt file will contain ips that are blocked from accessing.
+--Every line must only contain one ip.
+--Lines starting with "--" are ignored. So you can add comments.
