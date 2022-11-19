@@ -5,6 +5,8 @@ namespace ReverseProxy_NET6.Lib
 {
     public static class ProxyConfigLoader
     {
+        private static readonly EasLog logger = IEasLog.CreateLogger("TcpConnection");
+        
         public static void Load()
         {
             try
@@ -23,7 +25,7 @@ namespace ReverseProxy_NET6.Lib
             }
             catch (Exception ex)
             {
-                EasLogConsole.Error($"An error occurred : {ex.Message}");
+                logger.Exception(ex ,$"An error occurred");
                 throw;
             }
         }
@@ -51,7 +53,7 @@ namespace ReverseProxy_NET6.Lib
                 }
                 catch (Exception ex)
                 {
-                    EasLogConsole.Error($"[ERROR] Failed to start UDP Proxy {proxyName}. Exception: {ex.Message}");
+                    logger.Exception(ex,$"Failed to start UDP Proxy {proxyName}.");
                     throw;
                 }
                 yield return task;
@@ -71,7 +73,7 @@ namespace ReverseProxy_NET6.Lib
                 }
                 catch (Exception ex)
                 {
-                    EasLogConsole.Error($"[ERROR] Failed to start TCP Proxy {proxyName}. Exception: {ex.Message}");
+                    logger.Exception(ex,$"Failed to start TCP Proxy {proxyName}.");
                     throw;
                 }
                 yield return task;

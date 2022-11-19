@@ -5,7 +5,7 @@ namespace ReverseProxy_NET6.Proxy
 {
     public class UdpConnection
     {
-        private readonly EasLog logger = IEasLog.CreateLogger("UdpConnection");
+        private static readonly EasLog logger = IEasLog.CreateLogger("UdpConnection");
         
         private readonly UdpClient _localServer;
         private readonly UdpClient _forwardClient;
@@ -50,7 +50,7 @@ namespace ReverseProxy_NET6.Proxy
                     _forwardClient.Client.Bind(new IPEndPoint(IPAddress.Any, 0));
                     _forwardLocalEndpoint = _forwardClient.Client.LocalEndPoint;
                     _forwardConnectionBindCompleted.SetResult(true);
-                    logger.WriteLog(Severity.INFO, $"[INFO] [UDP] [ESTABLISHED] {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}");
+                    logger.Info("UDP", "ESTABLISHED", $"{_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}");
 
                     while (_isRunning)
                     {
@@ -65,7 +65,7 @@ namespace ReverseProxy_NET6.Proxy
                         {
                             if (_isRunning)
                             {
-                                logger.WriteLog(Severity.EXCEPTION, $"[ERROR] [UDP] An exception occurred while receiving a server datagram. Exception: {ex.Message}");
+                                logger.Exception(ex, "UDP", $"An exception occurred while receiving a server datagram.");
                             }
                         }
                     }
@@ -77,13 +77,13 @@ namespace ReverseProxy_NET6.Proxy
         {
             try
             {
-                logger.WriteLog(Severity.WARN, $"[ERROR] [UDP] Closed connection {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}. {_totalBytesForwarded} bytes forwarded, {_totalBytesResponded} bytes responded.");
+                logger.Warn("UDP", $"Closed connection {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}. {_totalBytesForwarded} bytes forwarded, {_totalBytesResponded} bytes responded.");
                 _isRunning = false;
                 _forwardClient.Close();
             }
             catch (Exception ex)
             {
-                logger.WriteLog(Severity.WARN, $"[ERROR] [UDP] An exception occurred while closing UdpConnection. Exception: {ex}");
+                logger.Exception(ex,"UDP", $"An exception occurred while closing UdpConnection.");
                 Console.WriteLine();
             }
         }

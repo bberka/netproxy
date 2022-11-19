@@ -9,7 +9,7 @@ namespace ReverseProxy_NET6.Proxy
 {
     public class UdpProxy 
     {
-        private readonly EasLog logger = IEasLog.CreateLogger("UdpProxy");
+        private static readonly EasLog logger = IEasLog.CreateLogger("UdpProxy");
 
         /// <summary>
         /// Milliseconds
@@ -43,7 +43,7 @@ namespace ReverseProxy_NET6.Proxy
                 localServer.Client.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
             localServer.Client.Bind(new IPEndPoint(localIpAddress, (ushort)Config.LocalPort));
 
-            logger.WriteLog(Severity.INFO, $"[INFO] [UDP] Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
+            logger.Info("UDP", $"Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
             var _ = Task.Run(async () =>
             {
                 while (true)
@@ -77,7 +77,7 @@ namespace ReverseProxy_NET6.Proxy
                 }
                 catch (Exception ex)
                 {
-                    logger.WriteLog(Severity.EXCEPTION, $"[EXCEPTION] [UDP] An exception occurred on receiving a client datagram: {ex}");
+                    logger.Exception(ex, "UDP" ,$"An exception occurred on receiving a client datagram.");
                     
                 }
             }
