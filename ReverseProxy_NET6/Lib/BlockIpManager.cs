@@ -44,10 +44,6 @@ namespace ReverseProxy_NET6.Lib
             if (ip.Length < 5) return false;
             return _blockedIps.Contains(ip);
         }
-        public static List<string> GetBlockedIps()
-        {
-            return _blockedIps;
-        }
         public static void Clear()
         {
             _blockedIps.Clear();

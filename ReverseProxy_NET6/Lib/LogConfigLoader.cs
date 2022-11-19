@@ -13,6 +13,7 @@
                 IsDebug = true,
                 TraceLogging = true,
                 WebInfoLogging = false,
+                LogFileExtension = ".txt",
             });
         }
         public static void Debug()
@@ -26,6 +27,7 @@
                 IsDebug = true,
                 TraceLogging = true,
                 WebInfoLogging = false,
+                LogFileExtension = ".txt",
             });
         }
         public static void Release()
@@ -39,6 +41,7 @@
                 IsDebug = false,
                 TraceLogging = true,
                 WebInfoLogging = false,
+                LogFileExtension = ".txt",
             });
         }
         public static void ReleaseEfficient()
@@ -52,6 +55,7 @@
                 IsDebug = false,
                 TraceLogging = false,
                 WebInfoLogging = false,
+                LogFileExtension = ".txt",
             });
         }
     }

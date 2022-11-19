@@ -8,6 +8,7 @@ namespace ReverseProxy_NET6.Proxy
 {
     public class TcpConnection
     {
+        private readonly EasLog logger = IEasLog.CreateLogger("TcpConnection");
 
         public TcpClient Client
         {
@@ -96,7 +97,7 @@ namespace ReverseProxy_NET6.Proxy
             }
             catch (Exception ex)
             {
-                EasLogConsole.Error($"[TCP] [{name}] An exception occurred while closing TcpConnection : {ex}");
+                logger.WriteLog(Severity.ERROR, $"[ERROR] [TCP] [{name}] An exception occurred while closing TcpConnection. Exception: {ex.Message}");
             }
         }
 
@@ -111,9 +112,8 @@ namespace ReverseProxy_NET6.Proxy
                     {
                         await _forwardClient.ConnectAsync(_remoteEndpoint.Address, _remoteEndpoint.Port, cancellationToken).ConfigureAwait(false);
                         _forwardLocalEndpoint = _forwardClient.Client.LocalEndPoint;
+                        logger.WriteLog(Severity.INFO, $"[INFO] [TCP] [{name}] [ESTABLISHED] {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}");
                         
-                        EasLogConsole.Info($"[TCP] [{name}] [ESTABLISHED] {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}");
-
                         using (var serverStream = _forwardClient.GetStream())
                         using (var clientStream = _localServerConnection.GetStream())
                         using (cancellationToken.Register(() =>
@@ -131,11 +131,11 @@ namespace ReverseProxy_NET6.Proxy
                 }
                 catch (Exception ex)
                 {
-                    EasLogConsole.Error($"[TCP] [{name}] An exception occurred during TCP stream : {ex}");
+                    logger.WriteLog(Severity.EXCEPTION, $"[EXCEPTION] [TCP] [{name}] An exception occurred during TCP stream. Exception: {ex}");
                 }
                 finally
                 {
-                    EasLogConsole.Warn($"[TCP] [{name}] Connection {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}. Forwarded({_totalBytesForwarded})/Responded({_totalBytesResponded}) bytes.");
+                    logger.WriteLog(Severity.WARN, $"[WARN] [TCP] [{name}] Connection {_sourceEndpoint} => {_serverLocalEndpoint} => {_forwardLocalEndpoint} => {_remoteEndpoint}. Forwarded({_totalBytesForwarded})/Responded({_totalBytesResponded}) bytes.");
                 }
             });
         }

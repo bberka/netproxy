@@ -23,7 +23,7 @@ namespace ReverseProxy_NET6.Lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred : {ex}");
+                EasLogConsole.Error($"An error occurred : {ex.Message}");
                 throw;
             }
         }
@@ -51,7 +51,7 @@ namespace ReverseProxy_NET6.Lib
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to start {proxyName} : {ex.Message}");
+                    EasLogConsole.Error($"[ERROR] Failed to start UDP Proxy {proxyName}. Exception: {ex.Message}");
                     throw;
                 }
                 yield return task;
@@ -71,7 +71,7 @@ namespace ReverseProxy_NET6.Lib
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to start {proxyName} : {ex.Message}");
+                    EasLogConsole.Error($"[ERROR] Failed to start TCP Proxy {proxyName}. Exception: {ex.Message}");
                     throw;
                 }
                 yield return task;

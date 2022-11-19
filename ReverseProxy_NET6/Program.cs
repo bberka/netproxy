@@ -1,5 +1,5 @@
 ﻿
-LogConfigLoader.Debug();
+LogConfigLoader.ReleaseEfficient();
 
 BlockIpManager.Load();
 

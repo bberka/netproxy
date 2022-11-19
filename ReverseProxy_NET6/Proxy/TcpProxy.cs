@@ -7,10 +7,10 @@ using System.Net.Sockets;
 
 namespace ReverseProxy_NET6.Proxy
 {
-    public class TcpProxy 
+    public class TcpProxy
     {
         private readonly EasLog logger = IEasLog.CreateLogger("TcpProxy");
-        
+
         /// <summary>
         /// Milliseconds
         /// </summary>
@@ -18,7 +18,7 @@ namespace ReverseProxy_NET6.Proxy
         public ProxyConfig Config { get; private set; }
         public ConcurrentBag<TcpConnection> Connections { get; private set; } = new();
         public string Name { get; private set; }
-        public TcpProxy(string name,ProxyConfig config)
+        public TcpProxy(string name, ProxyConfig config)
         {
             Name = name;
             Config = config;
@@ -28,7 +28,7 @@ namespace ReverseProxy_NET6.Proxy
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task Start() 
+        public async Task Start()
         {
             var result = IPAddress.TryParse(Config.LocalIp, out var localIpAddress);
             if (!result || localIpAddress == null)
@@ -39,8 +39,7 @@ namespace ReverseProxy_NET6.Proxy
             localServer.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
 
             localServer.Start();
-
-            EasLogConsole.Info($"[TCP] [{Name}] Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
+            logger.WriteLog(Severity.INFO, $"[INFO] [TCP] [{Name}] Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
             var _ = Task.Run(async () =>
             {
                 while (true)
@@ -73,23 +72,23 @@ namespace ReverseProxy_NET6.Proxy
                 {
                     var ips = await Dns.GetHostAddressesAsync(Config.ForwardIp).ConfigureAwait(false);
                     var tcpConnection = await TcpConnection.AcceptTcpClientAsync(localServer, new IPEndPoint(ips[0], (ushort)Config.ForwardPort)).ConfigureAwait(false);
-                    if (!ConnValidator.Validate(this, tcpConnection,out string reason))
+                    if (!ConnValidator.Validate(this, tcpConnection, out string reason))
                     {
-                        EasLogConsole.Warn($"[TCP] [{Name}] [{Config.LocalIp}:{Config.LocalPort}] [{tcpConnection.ClientEndPoint.GetIpAddress()}] Connection blocked due to {reason}");
+                        logger.WriteLog(Severity.INFO,$"[INFO] [TCP] [{Name}] [{Config.LocalIp}:{Config.LocalPort}] [{tcpConnection.ClientEndPoint.GetIpAddress()}] Connection blocked due to {reason}");
                         tcpConnection.Client.Close();
                         continue;
                     }
                     Connections.Add(tcpConnection);
                     tcpConnection.Run(Name);
-                    
+
                 }
                 catch (Exception ex)
                 {
-                    logger.Exception(ex,"TCP", Name,$"{Config.LocalIp}:{Config.LocalPort}",-1);
+                    logger.WriteLog(Severity.EXCEPTION, $"[EXCEPTION] [TCP] [{Name}] {Config.LocalIp}:{Config.LocalPort} Exception:{ex.Message}");
                 }
             }
         }
     }
 
-   
+
 }

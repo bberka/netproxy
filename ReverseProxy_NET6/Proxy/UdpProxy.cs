@@ -43,8 +43,7 @@ namespace ReverseProxy_NET6.Proxy
                 localServer.Client.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
             localServer.Client.Bind(new IPEndPoint(localIpAddress, (ushort)Config.LocalPort));
 
-            EasLogConsole.Info($"[UDP] Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
-
+            logger.WriteLog(Severity.INFO, $"[INFO] [UDP] Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");
             var _ = Task.Run(async () =>
             {
                 while (true)
@@ -78,7 +77,8 @@ namespace ReverseProxy_NET6.Proxy
                 }
                 catch (Exception ex)
                 {
-                    EasLogConsole.Error($"[UDP] An exception occurred on receiving a client datagram: {ex}");
+                    logger.WriteLog(Severity.EXCEPTION, $"[EXCEPTION] [UDP] An exception occurred on receiving a client datagram: {ex}");
+                    
                 }
             }
         }
