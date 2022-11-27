@@ -11,5 +11,6 @@
         public long ConnectionLimitPerIp { get; set; } = 0;
         public List<string> FilterConnection { get; set; } = new();
         public ushort RequireConnectionToPort { get; set; } = 0;
+        public bool ReadAndPrintData { get; set; } = false;
     }
 }

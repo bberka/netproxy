@@ -5,7 +5,8 @@
     "Protocol": "tcp",
     "ForwardIp": "142.132.251.160",
     "ForwardPort": 11901,
-    "RequireConnectionToPort": 44985
+    "RequireConnectionToPort": 44985,
+    "ReadAndPrintData": true
   },
   "Anticheat": {
     "LocalIp": "51.195.43.131",

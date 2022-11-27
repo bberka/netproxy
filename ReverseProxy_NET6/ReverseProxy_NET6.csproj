@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Reference Include="EasMe">
-      <HintPath>..\..\EasMe\EasMe\bin\Release\net6.0\EasMe.dll</HintPath>
+      <HintPath>..\..\easme-lib\EasMe\bin\Release\net6.0\EasMe.dll</HintPath>
     </Reference>
   </ItemGroup>
 
