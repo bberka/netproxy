@@ -9,7 +9,7 @@ namespace ReverseProxy_NET6.Proxy
 {
     public class UdpProxy 
     {
-        private static readonly EasLog logger = IEasLog.CreateLogger("UdpProxy");
+        private static readonly EasLog logger = EasLogFactory.CreateLogger("UdpProxy");
 
         /// <summary>
         /// Milliseconds

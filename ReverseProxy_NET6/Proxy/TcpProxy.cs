@@ -7,7 +7,7 @@ namespace ReverseProxy_NET6.Proxy
 {
 	public class TcpProxy
 	{
-		private static readonly EasLog logger = IEasLog.CreateLogger("TcpProxy");
+		private static readonly EasLog logger = EasLogFactory.CreateLogger("TcpProxy");
 
 		/// <summary>
 		/// Milliseconds
@@ -34,7 +34,7 @@ namespace ReverseProxy_NET6.Proxy
 				throw new Exception($"[TCP] [{Name}] Invalid localIp: {Config.LocalIp}");
 			}
 			var localServer = new TcpListener(new IPEndPoint(localIpAddress, (ushort)Config.LocalPort));
-			localServer.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
+			//localServer.Server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
 
 			localServer.Start();
 			logger.Info("TCP", Name, $"Proxy started [{localIpAddress}]:{Config.LocalPort} -> [{Config.ForwardIp}]:{Config.ForwardPort}");

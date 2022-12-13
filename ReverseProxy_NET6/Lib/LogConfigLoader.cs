@@ -4,62 +4,66 @@
     {
         public static void Default()
         {
-            IEasLog.LoadConfig(new EasLogConfiguration
+			EasLogFactory.LoadConfig(new EasLogConfiguration
             {
-                LogFileName = "Proxy",
+                LogFileName = "Proxy_",
                 AddRequestUrlToStart = false,
                 ConsoleAppender = true,
                 ExceptionHideSensitiveInfo = false,
-                IsDebug = true,
-                TraceLogging = true,
+                TraceLogging = false,
                 WebInfoLogging = false,
                 LogFileExtension = ".txt",
                 IsLogJson = false,
-            });
+                MinimumLogLevel = Severity.INFO,
+                DontLog = false,
+				LogFolderPath = "Logs",
+                StackLogCount = 0,
+                SeperateLogLevelToFolder = false,
+			});
         }
         public static void Debug()
         {
-            IEasLog.LoadConfig(new EasLogConfiguration
+			EasLogFactory.LoadConfig(new EasLogConfiguration
             {
                 LogFileName = "Proxy_Debug_",
                 AddRequestUrlToStart = false,
                 ConsoleAppender = true,
                 ExceptionHideSensitiveInfo = false,
-                IsDebug = true,
                 TraceLogging = true,
                 WebInfoLogging = false,
                 LogFileExtension = ".txt",
                 IsLogJson = false,
+                MinimumLogLevel = Severity.DEBUG
             });
         }
         public static void Release()
         {
-            IEasLog.LoadConfig(new EasLogConfiguration
+			EasLogFactory.LoadConfig(new EasLogConfiguration
             {
                 LogFileName = "Proxy_",
                 AddRequestUrlToStart = false,
                 ConsoleAppender = true,
                 ExceptionHideSensitiveInfo = false,
-                IsDebug = false,
                 TraceLogging = true,
                 WebInfoLogging = false,
                 LogFileExtension = ".txt",
                 IsLogJson = false,
+                MinimumLogLevel = Severity.WARN
             });
         }
         public static void ReleaseEfficient()
         {
-            IEasLog.LoadConfig(new EasLogConfiguration
+            EasLogFactory.LoadConfig(new EasLogConfiguration
             {
                 LogFileName = "Proxy_",
                 AddRequestUrlToStart = false,
                 ConsoleAppender = true,
                 ExceptionHideSensitiveInfo = true,
-                IsDebug = false,
                 TraceLogging = false,
                 WebInfoLogging = false,
                 LogFileExtension = ".txt",
                 IsLogJson = false,
+                MinimumLogLevel = Severity.ERROR
             });
         }
     }

@@ -7,7 +7,7 @@ namespace ReverseProxy_NET6.Proxy
 {
 	public class TcpConnection
 	{
-		private static readonly EasLog logger = IEasLog.CreateLogger("TcpConnection");
+		private static readonly EasLog logger = EasLogFactory.CreateLogger("TcpConnection");
 
 		public TcpClient Client
 		{

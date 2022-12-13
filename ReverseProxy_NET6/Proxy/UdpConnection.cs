@@ -5,7 +5,7 @@ namespace ReverseProxy_NET6.Proxy
 {
     public class UdpConnection
     {
-        private static readonly EasLog logger = IEasLog.CreateLogger("UdpConnection");
+        private static readonly EasLog logger = EasLogFactory.CreateLogger("UdpConnection");
         
         private readonly UdpClient _localServer;
         private readonly UdpClient _forwardClient;

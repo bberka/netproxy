@@ -8,14 +8,12 @@ namespace ReverseProxy_NET6.Lib
 {
     public static class BlockIpManager
     {
+        private static int BLOCK_LIST_RELOAD_INTERVAL = 5;
         private static List<string> BlockedIps 
         { 
             get
             {
-                if (_lastUpdate.AddMinutes(1) < DateTime.Now)
-                {
-                    Load();
-                }
+                Reload();
                 return _blockedIps;
             }
 
@@ -23,38 +21,67 @@ namespace ReverseProxy_NET6.Lib
         private static List<string> _blockedIps = new();
         
         private static DateTime _lastUpdate = DateTime.MinValue;
-        public static void Add(string ip)
+        private static void Add(string ip)
         {
-            if (!_blockedIps.Contains(ip))
+            lock (_blockedIps)
             {
-                _blockedIps.Add(ip);
+                if (!_blockedIps.Contains(ip))
+                {
+                    _blockedIps.Add(ip);
+                }
             }
         }
 
-        public static void Remove(string ip)
+        private static void Remove(string ip)
         {
-            if (_blockedIps.Contains(ip))
+            lock (_blockedIps)
             {
-                _blockedIps.Remove(ip);
+                if (_blockedIps.Contains(ip))
+                {
+                    _blockedIps.Remove(ip);
+                    WriteAll();
+                }
             }
         }
 
         public static bool IsBlocked(string ip)
         {
             if (ip.Length < 5) return false;
+            if (ip.StartsWith("::ffff:"))
+            {
+                ip = ip[7..];
+            }
             return _blockedIps.Contains(ip);
         }
-        public static void Clear()
+        private static void Clear()
         {
-            _blockedIps.Clear();
+            lock (_blockedIps)
+            {
+                _blockedIps.Clear();
+            }
         }
-        public static void Load()
+        private static List<string> GetLines()
+        {
+            if (!File.Exists("blocked_ips.txt")) return new();
+            var blockedIps = File.ReadAllLines("blocked_ips.txt").ToList();
+            blockedIps.RemoveAll(x => x.StartsWith("--"));
+            return blockedIps;
+        }
+
+        private static void WriteAll()
+        {
+            lock (_blockedIps)
+            {
+                File.WriteAllLines("blocked_ips.txt", _blockedIps);
+            }
+        }
+        private static void Reload()
         {
             try
             {
-                if (!File.Exists("blocked_ips.txt")) return;
-                var blockedIps = File.ReadAllLines("blocked_ips.txt");
-                foreach (var ip in blockedIps)
+                if (_lastUpdate.AddMinutes(BLOCK_LIST_RELOAD_INTERVAL) > DateTime.Now) return;
+                var lines = GetLines();
+                foreach (var ip in lines)
                 {
                     if (ip.StartsWith("--")) continue;
                     Add(ip);
@@ -63,8 +90,7 @@ namespace ReverseProxy_NET6.Lib
             }
             catch (Exception ex)
             {
-                EasLogConsole.Fatal($"An error occurred : {ex}");
-                throw;
+                EasLogFactory.StaticLogger.Fatal($"An error occurred : {ex}");
             }
         }
     }

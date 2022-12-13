@@ -1,6 +1,4 @@
 ﻿
-LogConfigLoader.ReleaseEfficient();
-
-BlockIpManager.Load();
+LogConfigLoader.Default();
 
 ProxyConfigLoader.Load();
