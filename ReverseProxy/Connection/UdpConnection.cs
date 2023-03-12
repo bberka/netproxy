@@ -1,12 +1,11 @@
-﻿using System.Net.Sockets;
-using System.Net;
+﻿using System.Net;
+using System.Net.Sockets;
 
-namespace ReverseProxy_NET6.Proxy
+namespace ReverseProxy.Connection
 {
     public class UdpConnection
     {
-        private static readonly EasLog logger = EasLogFactory.CreateLogger("UdpConnection");
-        
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
         private readonly UdpClient _localServer;
         private readonly UdpClient _forwardClient;
         public long LastActivity { get; private set; } = Environment.TickCount64;

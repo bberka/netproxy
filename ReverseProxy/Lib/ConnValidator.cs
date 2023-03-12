@@ -1,7 +1,8 @@
-﻿
-using MoonReverseProxy;
+﻿using ReverseProxy.Connection;
+using ReverseProxy.Models;
+using ReverseProxy.Proxy;
 
-namespace ReverseProxy_NET6.Lib
+namespace ReverseProxy.Lib
 {
     public static class ConnValidator
     {

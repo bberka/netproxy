@@ -1,16 +1,16 @@
 ﻿#nullable enable
 
-using ReverseProxy_NET6.Models;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using ReverseProxy.Connection;
+using ReverseProxy.Models;
 
-namespace ReverseProxy_NET6.Proxy
+namespace ReverseProxy.Proxy
 {
     public class UdpProxy 
     {
-        private static readonly EasLog logger = EasLogFactory.CreateLogger("UdpProxy");
-
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
         /// <summary>
         /// Milliseconds
         /// </summary>

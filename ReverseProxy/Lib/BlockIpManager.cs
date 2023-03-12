@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ReverseProxy_NET6.Lib
+namespace ReverseProxy.Lib
 {
     public static class BlockIpManager
     {

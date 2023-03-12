@@ -1,12 +1,12 @@
-﻿using MoonReverseProxy;
-using System.Text.Json;
+﻿using System.Text.Json;
+using ReverseProxy.Models;
+using ReverseProxy.Proxy;
 
-namespace ReverseProxy_NET6.Lib
+namespace ReverseProxy.Lib
 {
     public static class ProxyConfigLoader
     {
-        private static readonly EasLog logger = EasLogFactory.CreateLogger("TcpConnection");
-        
+        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
         public static void Load()
         {
             try

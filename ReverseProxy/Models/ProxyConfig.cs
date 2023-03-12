@@ -1,4 +1,4 @@
-﻿namespace ReverseProxy_NET6.Models
+﻿namespace ReverseProxy.Models
 {
     public class ProxyConfig
     {

@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stormancer.Netproxy", "Stormancer.NetProxy\Stormancer.Netproxy.csproj", "{B2120AF8-67E9-402A-A9D7-71573A873649}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProxy_NET6", "ReverseProxy_NET6\ReverseProxy_NET6.csproj", "{C0F50CF1-693A-4175-A520-E38C1935B73C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProxy", "ReverseProxy\ReverseProxy.csproj", "{C0F50CF1-693A-4175-A520-E38C1935B73C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B2120AF8-67E9-402A-A9D7-71573A873649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2120AF8-67E9-402A-A9D7-71573A873649}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2120AF8-67E9-402A-A9D7-71573A873649}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2120AF8-67E9-402A-A9D7-71573A873649}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C0F50CF1-693A-4175-A520-E38C1935B73C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C0F50CF1-693A-4175-A520-E38C1935B73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F50CF1-693A-4175-A520-E38C1935B73C}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,4 +1,4 @@
-﻿namespace ReverseProxy_NET6.Lib
+﻿namespace ReverseProxy.Lib
 {
     public static class CommandHelper
     {

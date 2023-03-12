@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-namespace MoonReverseProxy
+﻿namespace ReverseProxy
 {
     public static class Statics
     {

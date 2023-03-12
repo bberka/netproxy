@@ -1,0 +1,44 @@
+﻿{
+  "Auth": {
+    "LocalIp": "64.52.81.79",
+    "LocalPort": 11901,
+    "Protocol": "tcp",
+    "ForwardIp": "159.69.66.145",
+    "ForwardPort": 11901
+  },
+  "Anticheat": {
+    "LocalIp": "64.52.81.79",
+    "LocalPort": 44985,
+    "Protocol": "tcp",
+    "ForwardIp": "159.69.66.145",
+    "ForwardPort": 44985
+  },
+  "General": {
+    "LocalIp": "64.52.81.79",
+    "LocalPort": 8889,
+    "Protocol": "tcp",
+    "ForwardIp": "23.88.70.60",
+    "ForwardPort": 8889
+  },
+  "Elvia": {
+    "LocalIp": "64.52.81.199",
+    "LocalPort": 8889,
+    "Protocol": "tcp",
+    "ForwardIp": "88.99.167.220",
+    "ForwardPort": 8889
+  },
+  "Arsha": {
+    "LocalIp": "64.52.81.75",
+    "LocalPort": 8889,
+    "Protocol": "tcp",
+    "ForwardIp": "142.132.250.33",
+    "ForwardPort": 8889
+  },
+  "RBF": {
+    "LocalIp": "64.52.81.119",
+    "LocalPort": 8889,
+    "Protocol": "tcp",
+    "ForwardIp": "138.201.82.60",
+    "ForwardPort": 8889
+  }
+}

@@ -2,12 +2,15 @@
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using ReverseProxy.Connection;
+using ReverseProxy.Lib;
+using ReverseProxy.Models;
 
-namespace ReverseProxy_NET6.Proxy
+namespace ReverseProxy.Proxy
 {
 	public class TcpProxy
 	{
-		private static readonly EasLog logger = EasLogFactory.CreateLogger("TcpProxy");
+		private static readonly IEasLog logger = EasLogFactory.CreateLogger();
 
 		/// <summary>
 		/// Milliseconds
