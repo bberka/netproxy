@@ -3,16 +3,9 @@
     "LocalIp": "127.0.0.1",
     "LocalPort": 8888,
     "Protocol": "tcp",
-    "ForwardIp": "144.76.119.8",
+    "ForwardIp": "127.0.0.1",
     "ForwardPort": 9000,
     "ReadAndPrintData": true
-  },
-  "Debug2": {
-    "LocalIp": "127.0.0.1",
-    "LocalPort": 8889,
-    "Protocol": "tcp",
-    "ForwardIp": "144.76.119.8",
-    "ForwardPort": 8889,
-    "RequireConnectionToPort": 8888
   }
+
 }

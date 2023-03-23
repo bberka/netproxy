@@ -1,88 +1,92 @@
 ﻿using System.Text.Json;
-using ReverseProxy.Models;
-using ReverseProxy.Proxy;
 
-namespace ReverseProxy.Lib
+namespace ReverseProxy.Lib;
+
+public static class ProxyConfigLoader
 {
-    public static class ProxyConfigLoader
+    private static readonly IEasLog logger = EasLogFactory.CreateLogger();
+
+    public static void Load()
     {
-        private static readonly IEasLog logger = EasLogFactory.CreateLogger();
-        public static void Load()
+        try
         {
-            try
-            {
 #if RELEASE
                 var configJson = File.ReadAllText("config.json");
 #else
-                var configJson = File.ReadAllText("config_dev.json");
+            var configJson = File.ReadAllText("config_dev.json");
 #endif
-                Dictionary<string, ProxyConfig>? configs = JsonSerializer.Deserialize<Dictionary<string, ProxyConfig>>(configJson);
-                ValidateConfig(configs);
-#pragma warning disable CS8604 // Possible null reference argument.
-                var tasks = configs.SelectMany(c => ProxyFromConfig(c.Key, c.Value));
-#pragma warning restore CS8604 // Possible null reference argument.
-                Task.WhenAll(tasks).Wait();
+            var configs = JsonSerializer.Deserialize<Dictionary<string, ProxyConfig>>(configJson);
+            ValidateConfig(configs);
+            var tasks = configs.SelectMany(c => ProxyFromConfig(c.Key, c.Value));
+
+            Task.WhenAll(tasks).Wait();
+        }
+        catch (Exception ex)
+        {
+            logger.Exception(ex, "An error occurred");
+            AppTitleManager.This.PopError();
+            throw;
+        }
+    }
+
+    private static void ValidateConfig(Dictionary<string, ProxyConfig>? configs)
+    {
+        if (configs == null) throw new NullReferenceException("Config is NULL");
+    }
+
+    private static IEnumerable<Task> ProxyFromConfig(string proxyName, ProxyConfig proxyConfig)
+    {
+        var protocolHandled = false;
+        if (proxyConfig.Protocol == "udp")
+        {
+            protocolHandled = true;
+            Task task;
+            try
+            {
+                var proxy = new UdpProxy(proxyName, proxyConfig);
+                lock (Statics.UdpProxies)
+                {
+                    Statics.UdpProxies.Add(proxy);
+                }
+
+                task = proxy.Start();
+                AppTitleManager.This.PopListener();
             }
             catch (Exception ex)
             {
-                logger.Exception(ex ,$"An error occurred");
+                logger.Exception(ex, $"Failed to start UDP Proxy {proxyName}.");
+                AppTitleManager.This.PopError();
                 throw;
             }
+
+            yield return task;
         }
-        static void ValidateConfig(Dictionary<string, ProxyConfig>? configs)
+
+        if (proxyConfig.Protocol == "tcp")
         {
-            if (configs == null) throw new NullReferenceException("Config is NULL");
-            
-        }
-        static IEnumerable<Task> ProxyFromConfig(string proxyName, ProxyConfig proxyConfig)
-        {
-           
-            bool protocolHandled = false;
-            if (proxyConfig.Protocol == "udp")
+            protocolHandled = true;
+            Task task;
+            try
             {
-                protocolHandled = true;
-                Task task;
-                try
+                var proxy = new TcpProxy(proxyName, proxyConfig);
+                lock (Statics.TcpProxies)
                 {
-                    var proxy = new UdpProxy(proxyName, proxyConfig);
-                    lock (Statics.UdpProxies)
-                    {
-                        Statics.UdpProxies.Add(proxy);
-                    }
-                    task = proxy.Start();
+                    Statics.TcpProxies.Add(proxy);
                 }
-                catch (Exception ex)
-                {
-                    logger.Exception(ex,$"Failed to start UDP Proxy {proxyName}.");
-                    throw;
-                }
-                yield return task;
+
+                task = proxy.Start();
+                AppTitleManager.This.PopListener();
             }
-            if (proxyConfig.Protocol == "tcp" )
+            catch (Exception ex)
             {
-                protocolHandled = true;
-                Task task;
-                try
-                {
-                    var proxy = new TcpProxy(proxyName, proxyConfig);
-                    lock (Statics.TcpProxies)
-                    {
-                        Statics.TcpProxies.Add(proxy);
-                    }
-                    task = proxy.Start();
-                }
-                catch (Exception ex)
-                {
-                    logger.Exception(ex,$"Failed to start TCP Proxy {proxyName}.");
-                    throw;
-                }
-                yield return task;
+                logger.Exception(ex, $"Failed to start TCP Proxy {proxyName}.");
+                AppTitleManager.This.PopError();
+                throw;
             }
 
-            if (!protocolHandled)
-            {
-                throw new InvalidOperationException($"protocol not supported {proxyConfig.Protocol}");
-            }
+            yield return task;
         }
+
+        if (!protocolHandled) throw new InvalidOperationException($"protocol not supported {proxyConfig.Protocol}");
     }
 }
