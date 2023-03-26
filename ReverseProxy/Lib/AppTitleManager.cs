@@ -40,7 +40,16 @@ public class AppTitleManager
     private static void Update(AppTitleData data)
     {
         _data = data;
-        var format = string.Format(_title, data.Listener, data.Total, data.Live, data.Blocked, data.Load, data.Error,data.Killed, data.BytesForwarded,data.BytesResponded);
+        var format = string.Format(_title, 
+            data.Listener, 
+            data.Total, 
+            data.Live, 
+            data.Blocked, 
+            data.Load, 
+            data.Error,
+            data.Killed, 
+            data.BytesForwarded,
+            data.BytesResponded);
         UpdateConsoleTitle(format);
     }
 
@@ -49,21 +58,9 @@ public class AppTitleManager
         while (true)
         {
             Update(_data);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
         }
     }
-
-    public void SetLive(int live)
-    {
-        _data.Live = live;
-    }
-
-
-    public void SetLoad(int load)
-    {
-        _data.Load = load;
-    }
-
 
 
     public void PopError()
@@ -108,11 +105,8 @@ public class AppTitleManager
     public void DecreaseLive()
     {
         _data.Live--;
+        if(_data.Live < 0 ) _data.Live = 0;
     }
-
-
-    public AppTitleData Get()
-    {
-        return _data;
-    }
+    
+  
 }

@@ -58,7 +58,6 @@ public class TcpProxy
                     else
                     {
                         Connections.Add(tcpConnection);
-                        AppTitleManager.This.SetLive(Connections.Count);
                     }
 
             }
