@@ -21,7 +21,7 @@ Disclaimer
 ==========
 Error management exist, but is minimalist. IPV6 is not supported on the forwarding side.
 
-Usage
+Usage (Obsolete)
 =====
 - Compile for your platform following instructions at https://www.microsoft.com/net/core
 - Rewrite the `config.json` file to fit your need
