@@ -40,7 +40,9 @@ Configuration
         "ForwardIp": "127.0.0.1",
         "ForwardPort": 8888,
         "MaxConnectionLimit" : 99,
-        "FilterConnection"
+        "FilterConnection" : [
+          "127.0.0.1",
+        ]
       },
       "AntiCheat": {
         "LocalIp": "127.0.0.1",
@@ -67,4 +69,5 @@ Configuration
 - *forwardPort* : The port the traffic will be forwarded to.
 - *MaxConnectionLimit* : Number of connection limit. If 0 or not exists, no limit applied.
 - *ConnectionLimitPerIp* : Number of connections allowed from a single Ip Address. If 0 or not exists, no limit applied.
-- *RequireConnectionToPort* : In a case where it is required to have a connection established to a proxy port before connecting to another. 
+- *RequireConnectionToPort* : In a case where it is required to have a connection established to a proxy port before connecting to another.
+- *FilterConnection* : Only allows Ip Addresses in this array. It is recommended to set this config in your Firewall rather than in Proxy Config
