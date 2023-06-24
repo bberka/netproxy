@@ -21,7 +21,7 @@ Disclaimer
 ==========
 Error management exist, but is minimalist. IPV6 is not supported on the forwarding side.
 
-Usage (Obsolete)
+Usage
 =====
 - Compile for your platform following instructions at https://www.microsoft.com/net/core
 - Rewrite the `config.json` file to fit your need
@@ -31,15 +31,33 @@ Configuration
 =============
 `config.json` contains a map of named forwarding rules, for instance :
 
-    {
-     "http": {
-     "localport": 80,
-     "localip":"",
-     "protocol": "tcp",
-     "forwardIp": "xx.xx.xx.xx",
-     "forwardPort": 80
-     },
-    ...
+
+     {
+      "Login": {
+        "LocalIp": "127.0.0.1",
+        "LocalPort": 8800,
+        "Protocol": "tcp",
+        "ForwardIp": "127.0.0.1",
+        "ForwardPort": 8888,
+        "MaxConnectionLimit" : 99,
+        "FilterConnection"
+      },
+      "AntiCheat": {
+        "LocalIp": "127.0.0.1",
+        "LocalPort": 8780,
+        "Protocol": "tcp",
+        "ForwardIp": "127.0.0.1",
+        "ForwardPort": 8781
+      },
+      "Game": {
+        "LocalIp": "127.0.0.1",
+        "LocalPort": 8809,
+        "Protocol": "tcp",
+        "ForwardIp": "127.0.0.1",
+        "ForwardPort": 8889,
+        "RequireConnectionToPort" : 8780
+      },
+      
     }
 
 - *localport* : The local port the forwarder should listen to.
@@ -47,4 +65,6 @@ Configuration
 - *protocol* : The protocol to forward. `tcp`,`udp`, or `any`.
 - *forwardIp* : The ip the traffic will be forwarded to.
 - *forwardPort* : The port the traffic will be forwarded to.
-
+- *MaxConnectionLimit* : Number of connection limit. If 0 or not exists, no limit applied.
+- *ConnectionLimitPerIp* : Number of connections allowed from a single Ip Address. If 0 or not exists, no limit applied.
+- *RequireConnectionToPort* : In a case where it is required to have a connection established to a proxy port before connecting to another. 
