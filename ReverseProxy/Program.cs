@@ -1,3 +1,3 @@
-﻿LogConfigLoader.Default();
+﻿LogConfigLoader.Configure();
 
 ProxyConfigLoader.Load();

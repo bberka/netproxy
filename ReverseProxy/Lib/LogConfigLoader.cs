@@ -1,64 +1,33 @@
-﻿namespace ReverseProxy.Lib;
+﻿using Serilog;
+using Serilog.ConfigHelper;
+using Serilog.ConfigHelper.Enricher;
+using Serilog.Formatting.Compact;
+
+namespace ReverseProxy.Lib;
 
 public static class LogConfigLoader
 {
-    public static void Default()
-    {
-        EasLogFactory.Configure(x =>
-        {
-            x.LogFileName = "Proxy_";
-            x.ConsoleAppender = true;
-            x.ExceptionHideSensitiveInfo = false;
-            x.TraceLogging = false;
-            x.WebInfoLogging = false;
-            x.MinimumLogLevel = EasLogLevel.Information;
-            x.LogFolderPath = "Logs";
-            x.SeparateLogLevelToFolder = false;
-        });
-    }
+  private static readonly string LogPath = Path.Combine("Log", "Log.txt");
 
-    public static void Debug()
-    {
-        EasLogFactory.Configure(x =>
-        {
-            x.LogFileName = "Proxy_";
-            x.ConsoleAppender = true;
-            x.ExceptionHideSensitiveInfo = false;
-            x.TraceLogging = false;
-            x.WebInfoLogging = false;
-            x.MinimumLogLevel = EasLogLevel.Debug;
-            x.LogFolderPath = "Logs";
-            x.SeparateLogLevelToFolder = false;
-        });
-    }
+  public static void Configure() {
+    Log.Logger = GetDefaultConfiguration()
+      .CreateLogger();
+  }
 
-    public static void Release()
-    {
-        EasLogFactory.Configure(x =>
-        {
-            x.LogFileName = "Proxy_";
-            x.ConsoleAppender = true;
-            x.ExceptionHideSensitiveInfo = false;
-            x.TraceLogging = false;
-            x.WebInfoLogging = false;
-            x.MinimumLogLevel = EasLogLevel.Information;
-            x.LogFolderPath = "Logs";
-            x.SeparateLogLevelToFolder = false;
-        });
-    }
-
-    public static void ReleaseEfficient()
-    {
-        EasLogFactory.Configure(x =>
-        {
-            x.LogFileName = "Proxy_";
-            x.ConsoleAppender = true;
-            x.ExceptionHideSensitiveInfo = false;
-            x.TraceLogging = false;
-            x.WebInfoLogging = false;
-            x.MinimumLogLevel = EasLogLevel.Warning;
-            x.LogFolderPath = "Logs";
-            x.SeparateLogLevelToFolder = false;
-        });
-    }
+  private static LoggerConfiguration GetDefaultConfiguration() {
+    var template = new SerilogTemplateBuilder()
+                   .AddTimeStamp()
+                   .AddLevel()
+                   .AddMessage()
+                   .AddException()
+                   .Build();
+    var config = new LoggerConfiguration()
+                 .MinimumLevel.Information()
+                 .WriteTo.Console(outputTemplate: template)
+                 .WriteTo.File(LogPath,
+                               rollingInterval: RollingInterval.Day,
+                               retainedFileCountLimit: 14,
+                               outputTemplate: template);
+    return config;
+  }
 }
