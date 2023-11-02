@@ -1,0 +1,10 @@
+﻿{
+  "Proxy": {
+    "LocalIp": "127.0.0.1",
+    "LocalPort": 11901,
+    "Protocol": "tcp",
+    "ForwardIp": "127.0.0.1",
+    "ForwardPort": 11901
+  },
+ 
+}
