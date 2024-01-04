@@ -1,5 +1,4 @@
-﻿
-LogConfigLoader.ReleaseEfficient();
+﻿LogConfigLoader.Configure();
 
 BlockIpManager.Load();
 

@@ -1,66 +1,19 @@
-﻿namespace ReverseProxy_NET6.Lib
+﻿using Serilog.Events;
+using Serilog.Formatting.Compact;
+
+namespace ReverseProxy_NET6.Lib;
+
+public static class LogConfigLoader
 {
-    public static class LogConfigLoader
-    {
-        public static void Default()
-        {
-            IEasLog.LoadConfig(new EasLogConfiguration
-            {
-                LogFileName = "Proxy",
-                AddRequestUrlToStart = false,
-                ConsoleAppender = true,
-                ExceptionHideSensitiveInfo = false,
-                IsDebug = true,
-                TraceLogging = true,
-                WebInfoLogging = false,
-                LogFileExtension = ".txt",
-                IsLogJson = false,
-            });
-        }
-        public static void Debug()
-        {
-            IEasLog.LoadConfig(new EasLogConfiguration
-            {
-                LogFileName = "Proxy_Debug_",
-                AddRequestUrlToStart = false,
-                ConsoleAppender = true,
-                ExceptionHideSensitiveInfo = false,
-                IsDebug = true,
-                TraceLogging = true,
-                WebInfoLogging = false,
-                LogFileExtension = ".txt",
-                IsLogJson = false,
-            });
-        }
-        public static void Release()
-        {
-            IEasLog.LoadConfig(new EasLogConfiguration
-            {
-                LogFileName = "Proxy_",
-                AddRequestUrlToStart = false,
-                ConsoleAppender = true,
-                ExceptionHideSensitiveInfo = false,
-                IsDebug = false,
-                TraceLogging = true,
-                WebInfoLogging = false,
-                LogFileExtension = ".txt",
-                IsLogJson = false,
-            });
-        }
-        public static void ReleaseEfficient()
-        {
-            IEasLog.LoadConfig(new EasLogConfiguration
-            {
-                LogFileName = "Proxy_",
-                AddRequestUrlToStart = false,
-                ConsoleAppender = true,
-                ExceptionHideSensitiveInfo = true,
-                IsDebug = false,
-                TraceLogging = false,
-                WebInfoLogging = false,
-                LogFileExtension = ".txt",
-                IsLogJson = false,
-            });
-        }
-    }
+  public static void Configure() {
+    const string template = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+    const string logPath = "logs/log.txt";
+    const LogEventLevel logLevel = LogEventLevel.Information;
+    var serilogConfig = new Serilog.LoggerConfiguration()
+                        .MinimumLevel.Is(logLevel)
+                        .Enrich.FromLogContext()
+                        .WriteTo.Console(logLevel, template)
+                        .WriteTo.File(new CompactJsonFormatter(), logPath);
+    Log.Logger = serilogConfig.CreateLogger();
+  }
 }
